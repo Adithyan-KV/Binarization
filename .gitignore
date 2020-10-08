@@ -3,3 +3,6 @@
 #venvs
 .vscode
 img
+
+#folder with trial images
+test_images

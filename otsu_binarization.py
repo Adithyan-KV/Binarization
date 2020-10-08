@@ -1,3 +1,4 @@
+import histograms
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -8,9 +9,9 @@ def main():
         image_data = np.asarray(image, dtype=np.uint8)
         luma_image_data = convert_to_greyscale(image_data)
         luma_image = Image.fromarray(np.uint8(luma_image_data))
-        luma_image.show()
-        hist = np.histogram(luma_image)
-        print(hist)
+        # luma_image.show()
+        histograms.greyscale_histogram(image)
+        histograms.color_histogram(image)
 
 
 def convert_to_greyscale(image):
