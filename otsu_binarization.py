@@ -5,16 +5,15 @@ from PIL import Image
 
 
 def main():
-    with Image.open("city.jpg") as image:
+    with Image.open("coin.jpg") as image:
         image_data = np.asarray(image, dtype=np.uint8)
         luma_image_data = convert_to_greyscale(image_data)
+        # For visualizations
         # luma_image = Image.fromarray(np.uint8(luma_image_data))
         # luma_image.show()
-        # histograms.greyscale_histogram(image)
+        # luma_image.save('luma.png')
+        histograms.greyscale_histogram(image)
         # histograms.color_histogram(image)
-        # binarized_data = binarize(luma_image_data, 50)
-        # binary_image = Image.fromarray(np.uint8(binarized_data))
-        # binary_image.show()
         threshold = get_optimum_threshold(luma_image_data)
         print(threshold)
         binarized_image_data = binarize(luma_image_data, threshold)
@@ -26,6 +25,7 @@ def main():
 def get_optimum_threshold(image_data):
     threshold_with_max_var = 0
     max_variance = 0
+    variance_array = np.zeros(255)
     for threshold in range(255):
         print(threshold)
         c1 = []
@@ -36,14 +36,28 @@ def get_optimum_threshold(image_data):
                     c1.append(pixel)
                 else:
                     c2.append(pixel)
-        if not len(c1) == 0 and len(c2) == 0:
+        if len(c1) != 0 and len(c2) != 0:
             w1 = len(c1) / np.size(image_data)
             w2 = len(c2) / np.size(image_data)
             interclass_variance = w1 * w2 * (np.mean(c1) - np.mean(c2))**2
             if interclass_variance > max_variance:
                 threshold_with_max_var = threshold
                 max_variance = interclass_variance
+            variance_array[threshold] = interclass_variance
+    print(threshold_with_max_var)
+    # plot_variance_curve(variance_array, max_variance)
     return threshold_with_max_var
+
+
+def plot_variance_curve(variance_array, max_variance):
+    threshold_array = np.arange(0, 255, 1)
+    plt.plot(threshold_array, variance_array)
+    plt.axvline(max_variance, color='black')
+    plt.annotate(text='maxima', xy=(max(variance_array), max_variance + 40))
+    plt.xlabel("threshold")
+    plt.ylabel("interclass variance")
+    plt.title("threshold vs variance")
+    plt.show()
 
 
 def convert_to_greyscale(image):
