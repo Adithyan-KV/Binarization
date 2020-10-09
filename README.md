@@ -8,11 +8,14 @@ Takes an image, and sets all the pixels with a luma value above a certain thresh
 
 ![Demo image with stages](./demo_images/visualization_demo.png)
 
+Image of [Manhattan Bridge, New York by Patrick Tomasso](https://unsplash.com/photos/SVVTZtTGyaU) taken from [Unsplash](https://unsplash.com)
 ## Examples
 
 Some more examples of the algorithm in action
 
 ![Examples of binarization](./demo_images/examples.png)
+
+images of [London bridge by Kevin Keith](https://unsplash.com/photos/fE3c40Fjl0M) and [Coin by Claudio Shcwarz](https://unsplash.com/photos/gcVwy4-735s) taken from [Unsplash](https://unsplash.com)
 
 ## Dependancies
 
