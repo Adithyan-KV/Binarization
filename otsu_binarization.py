@@ -2,27 +2,33 @@ import histograms
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
+import time
 
 
 def main():
-    with Image.open("coin.jpg") as image:
+    with Image.open("test_images/bridge.jpg") as image:
         image_data = np.asarray(image, dtype=np.uint8)
         luma_image_data = convert_to_greyscale(image_data)
         # For visualizations
         # luma_image = Image.fromarray(np.uint8(luma_image_data))
         # luma_image.show()
         # luma_image.save('luma.png')
-        histograms.greyscale_histogram(image)
+        # histograms.greyscale_histogram(image)
         # histograms.color_histogram(image)
+        start = time.time()
         threshold = get_optimum_threshold(luma_image_data)
+        end = time.time()
         print(threshold)
+        runtime = end - start
+        print(runtime)
         binarized_image_data = binarize(luma_image_data, threshold)
         binarized_image = Image.fromarray(np.uint8(binarized_image_data))
-        binarized_image.show()
+        # binarized_image.show()
         binarized_image.save('output.jpg')
 
 
 def get_optimum_threshold(image_data):
+    number_of_pixels = np.size(image_data)
     threshold_with_max_var = 0
     max_variance = 0
     variance_array = np.zeros(255)
@@ -37,8 +43,8 @@ def get_optimum_threshold(image_data):
                 else:
                     c2.append(pixel)
         if len(c1) != 0 and len(c2) != 0:
-            w1 = len(c1) / np.size(image_data)
-            w2 = len(c2) / np.size(image_data)
+            w1 = len(c1) / number_of_pixels
+            w2 = len(c2) / number_of_pixels
             interclass_variance = w1 * w2 * (np.mean(c1) - np.mean(c2))**2
             if interclass_variance > max_variance:
                 threshold_with_max_var = threshold
