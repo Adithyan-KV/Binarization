@@ -32,20 +32,21 @@ def get_optimum_threshold(image_data):
     threshold_with_max_var = 0
     max_variance = 0
     variance_array = np.zeros(255)
+    sum_total = np.sum(image_data)
     for threshold in range(255):
         print(threshold)
         c1 = []
-        c2 = []
         for row in image_data:
             for pixel in row:
                 if pixel > threshold:
                     c1.append(pixel)
-                else:
-                    c2.append(pixel)
-        if len(c1) != 0 and len(c2) != 0:
-            w1 = len(c1) / number_of_pixels
-            w2 = len(c2) / number_of_pixels
-            interclass_variance = w1 * w2 * (np.mean(c1) - np.mean(c2))**2
+        if len(c1) != 0:
+            class_length = len(c1)
+            weight = class_length / number_of_pixels
+            mean_1 = sum(c1) / class_length
+            mean_2 = (sum_total - sum(c1)) / (number_of_pixels - class_length)
+            interclass_variance = weight * \
+                (1 - weight) * (mean_1 - mean_2)**2
             if interclass_variance > max_variance:
                 threshold_with_max_var = threshold
                 max_variance = interclass_variance
